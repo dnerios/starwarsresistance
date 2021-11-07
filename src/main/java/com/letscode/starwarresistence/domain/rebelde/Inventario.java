@@ -37,7 +37,7 @@ public class Inventario {
 
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="COD_INVENT", nullable=false)
-	private InventarioAgrupamento item;
+	private InventarioAgrupamento agrupamento;
 	
 	
 	//RELACIONAMENTOS

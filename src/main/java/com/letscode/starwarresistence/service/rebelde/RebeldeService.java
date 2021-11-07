@@ -40,7 +40,7 @@ public class RebeldeService implements iRebeldeService{
 			rebelde.setIndicadorTraidor(true);
 		}
 		
-		repository.save(rebelde);
+		repository.saveAndFlush(rebelde);
 	}
 
 	@Override
@@ -52,6 +52,7 @@ public class RebeldeService implements iRebeldeService{
 		rebelde.getLocalizacao().setLatitude(mapaLocalizacaoRebelde.getCoordenadas().getLatitude());
 		rebelde.getLocalizacao().setLongitude(mapaLocalizacaoRebelde.getCoordenadas().getLongitude());
 		
+		repository.saveAndFlush(rebelde);
 	}
 
 }
