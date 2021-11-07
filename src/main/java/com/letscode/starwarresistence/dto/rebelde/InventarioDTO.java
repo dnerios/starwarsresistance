@@ -12,5 +12,8 @@ import lombok.Data;
 @Builder
 public class InventarioDTO implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
+	private Integer codigo;
 	private List<ItemDTO> itens;
 }

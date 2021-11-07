@@ -43,7 +43,7 @@ public class Galaxias {
 	@NotNull(message = "De qual galáxia você veio?")
 	private String nome;
 
-	@Column(name = "DAT_HORA_CRIACAO")
+	@Column(name = "DAT_CRIA")
 	@JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")
 	private Date dataHoraCriacao;
 	

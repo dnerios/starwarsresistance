@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,12 +28,12 @@ public class RebeldeResource {
 	private iHttpResponse httpService;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<BodyDefaultResponseDTO> adicionarRebelde(@Valid RebeldeDTO rebelde) {
+	public ResponseEntity<BodyDefaultResponseDTO> adicionarRebelde(@Valid @RequestBody RebeldeDTO rebelde) {
 		try {
 			
 			service.adicionarRebelde(rebelde);
 			
-			return httpService.montarResposta(HttpStatus.OK, null, null, null);
+			return httpService.montarResposta(HttpStatus.CREATED, null, null, null);
 			
 		} catch (Exception e) {
 			return httpService.montarResposta(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null, null);
@@ -41,7 +42,7 @@ public class RebeldeResource {
 	
 	
 	@RequestMapping(value = "localizacao", method = RequestMethod.PUT)
-	public ResponseEntity<BodyDefaultResponseDTO> atualizarLocalizacao(@Valid MapaLocalizacaoDTO localizacaoRebelde) {
+	public ResponseEntity<BodyDefaultResponseDTO> atualizarLocalizacao(@Valid @RequestBody MapaLocalizacaoDTO localizacaoRebelde) {
 		try {
 			
 			service.atualizarLocalizacao(localizacaoRebelde);

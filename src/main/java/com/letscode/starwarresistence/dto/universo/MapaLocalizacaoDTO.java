@@ -2,7 +2,7 @@ package com.letscode.starwarresistence.dto.universo;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 public class MapaLocalizacaoDTO implements Serializable{
 
-	@NotBlank(message = "Procurando um fantasma? Informe o código do rebelde!")
+	@NotNull(message = "Procurando um fantasma? Informe o código do rebelde!")
 	private Integer codigoRebelde;
 
 	private LocalizacaoDTO coordenadas;

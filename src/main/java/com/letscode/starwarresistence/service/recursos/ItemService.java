@@ -3,41 +3,50 @@ package com.letscode.starwarresistence.service.recursos;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.letscode.starwarresistence.domain.rebelde.InventarioAgrupamento;
 import com.letscode.starwarresistence.domain.rebelde.Rebelde;
 import com.letscode.starwarresistence.dto.rebelde.RebeldeNegocianteDTO;
 import com.letscode.starwarresistence.dto.recursos.ItemDTO;
+import com.letscode.starwarresistence.repository.rebelde.InventarioAgrupamentoRepository;
 import com.letscode.starwarresistence.repository.rebelde.RebeldeRepository;
 import com.letscode.starwarresistence.shared.exceptions.ObjectNotFoundException;
 import com.letscode.starwarresistence.shared.exceptions.PontosInsuficientesException;
 import com.letscode.starwarresistence.shared.exceptions.TraidorNegocianteException;
 
+@Service
 public class ItemService implements iItemService {
 
 	@Autowired
 	private RebeldeRepository repository;
 	
+	@Autowired
+	private InventarioAgrupamentoRepository inventarioAgrupamentoRepository;
+	
 	@Override
 	public void negociar(RebeldeNegocianteDTO negociantePrimario, RebeldeNegocianteDTO negocianteSecundario) throws ObjectNotFoundException, TraidorNegocianteException, PontosInsuficientesException {
-		Rebelde dbNegPrimario = repository.findById(negociantePrimario.getCodigoRebelde()).orElseThrow(
-				() -> new ObjectNotFoundException("Rebelde primário (Cod." + negociantePrimario.getCodigoRebelde() + ") não encontrado. Confira o código de identificação."));
-
-		Rebelde dbNegSecundario = repository.findById(negocianteSecundario.getCodigoRebelde()).orElseThrow(
-				() -> new ObjectNotFoundException("Rebelde primário (Cod." + negocianteSecundario.getCodigoRebelde() + ") não encontrado. Confira o código de identificação."));
-
-		if(dbNegPrimario.getIndicadorTraidor() || dbNegSecundario.getIndicadorTraidor()) {
-			throw new TraidorNegocianteException("Há um traidor entre nós! Resolva o problema, ou... Eu mesmo resolverei!");
-		}
 		
-		negociantePrimario.setPontosNegociacao(calcularPontosNegociacao(negociantePrimario));
-		negocianteSecundario.setPontosNegociacao(calcularPontosNegociacao(negocianteSecundario));
+		Rebelde dbNegPrimario = avaliarNegociante(negociantePrimario);
+		Rebelde dbNegSecundario = avaliarNegociante(negocianteSecundario);
 		
-		if(negociantePrimario.getPontosNegociacao() != negocianteSecundario.getPontosNegociacao()) {
-			throw new PontosInsuficientesException("Ora ora... Parece que temos um espertinho querendo tirar vantagem! As negociações só podem ser feitas com a mesma quantidade de pontos para ambas as partes.");
-		}
+		avaliarRestricoes(negociantePrimario, negocianteSecundario);
+		
+		efetivarTransferencia(dbNegPrimario, dbNegSecundario, negociantePrimario.getItens());
+		efetivarTransferencia(dbNegSecundario, dbNegPrimario, negocianteSecundario.getItens());
 		
 	}
 	
+	private Rebelde avaliarNegociante(RebeldeNegocianteDTO negociante) throws ObjectNotFoundException, TraidorNegocianteException {
+		Rebelde rebelde = repository.findById(negociante.getCodigoRebelde()).orElseThrow(
+				() -> new ObjectNotFoundException("Rebelde primário (Cod." + negociante.getCodigoRebelde() + ") não encontrado. Confira o código de identificação."));
+		
+		if(rebelde.getIndicadorTraidor()) {
+			throw new TraidorNegocianteException(rebelde.getNome() + " é um traidor! Resolva o problema, ou... Eu mesmo resolverei!");
+		} else {
+			return rebelde;
+		}
+	}
 	
 	private Integer calcularPontosNegociacao(RebeldeNegocianteDTO negociante) {
 		negociante.getItens().forEach(
@@ -47,21 +56,24 @@ public class ItemService implements iItemService {
 		
 		return negociante.getPontosNegociacao();
 	}
-
-	private List<ItemDTO> efetivarTransferencia(Rebelde rebeldeOrigem, Rebelde rebeldeDestino, List<ItemDTO> itens) {
-		//Método fará a troca dos itens e devolverá a lista de itens que o jogador destino tinha antes da troca.
 	
-		rebeldeOrigem.getInventario().getAgrupamento().getItens().stream().findFirst(x -> x.codigo = 5).get();
-		rebeldeOrigem.getInventario().getAgrupamento().getItens().stream().filter(x -> x.getCodigo() = )
+	private void avaliarRestricoes(RebeldeNegocianteDTO negociantePrimario, RebeldeNegocianteDTO negocianteSecundario) throws PontosInsuficientesException {
+		negociantePrimario.setPontosNegociacao(calcularPontosNegociacao(negociantePrimario));
+		negocianteSecundario.setPontosNegociacao(calcularPontosNegociacao(negocianteSecundario));
 		
-		itens.forEach(item -> {
-			rebeldeOrigem.getInventario().getAgrupamento().getItens()
-				.stream()
-				.filter(x -> x.getCodigo() = item.getCodigo())
-				.findFirst()
-			
-			
-		});
+		if(negociantePrimario.getPontosNegociacao() != negocianteSecundario.getPontosNegociacao()) {
+			throw new PontosInsuficientesException("Ora ora... Parece que temos um espertinho querendo tirar vantagem! As negociações só podem ser feitas com a mesma quantidade de pontos para ambas as partes.");
+		}
+	}
+
+	private void efetivarTransferencia(Rebelde rebeldeOrigem, Rebelde rebeldeDestino, List<ItemDTO> itens) {	
+		
+		for (ItemDTO item : itens) {
+			InventarioAgrupamento inventarioAgrupamento = inventarioAgrupamentoRepository.findById(item.getCodigoAgrupamento()).get();
+			inventarioAgrupamento.setInventario(rebeldeDestino.getInventario());
+			inventarioAgrupamentoRepository.save(inventarioAgrupamento);
+		}
+		
 	}
 
 }

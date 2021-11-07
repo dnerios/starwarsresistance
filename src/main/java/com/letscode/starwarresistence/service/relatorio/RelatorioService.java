@@ -1,5 +1,8 @@
 package com.letscode.starwarresistence.service.relatorio;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class RelatorioService implements iRelatorioService {
 
 	@Override

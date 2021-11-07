@@ -1,7 +1,6 @@
 package com.letscode.starwarresistence.domain.rebelde;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -41,13 +40,13 @@ public class InventarioAgrupamento {
 	@Column(name = "COD_AGRUP_INVNT")
 	private Integer codigo;
 
-	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="COD_INVENT", nullable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="COD_INVENT", nullable=true)
 	private Inventario inventario;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="COD_ITEM", nullable=false)
-	private List<Item> itens;
+	private Item item;
 	
 	@Column(name = "DAT_HORA_CRIACAO")
 	@JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")

@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class ItemResource {
 	private iHttpResponse httpService;
 	
 	@RequestMapping(name = "negociar", method = RequestMethod.POST)
-	public ResponseEntity<BodyDefaultResponseDTO> adicionarRebelde(@Valid NegociarItensDTO negociacao) {
+	public ResponseEntity<BodyDefaultResponseDTO> adicionarRebelde(@Valid @RequestBody NegociarItensDTO negociacao) {
 		try {
 			
 			service.negociar(negociacao.getNegociantePrimario(), negociacao.getNegocianteSecundario());

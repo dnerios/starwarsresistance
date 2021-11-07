@@ -57,7 +57,7 @@ public class Rebelde {
 	private MapaLocalizacao localizacao;
 
 	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="COD_INVENT", nullable=false)
+    @JoinColumn(name="COD_INVENT", nullable = true)
 	private Inventario inventario;
 	
 	@Column(name = "IND_TRAID", nullable = false)

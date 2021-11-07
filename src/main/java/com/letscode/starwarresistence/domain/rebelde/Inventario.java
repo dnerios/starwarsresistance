@@ -1,12 +1,14 @@
 package com.letscode.starwarresistence.domain.rebelde;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -34,13 +36,12 @@ public class Inventario {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "COD_INVENT")
 	private Integer codigo;
-
-	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="COD_INVENT", nullable=false)
-	private InventarioAgrupamento agrupamento;
 	
 	
 	//RELACIONAMENTOS
+	@JsonIgnore
+	@OneToMany(mappedBy = "inventario", fetch = FetchType.EAGER)
+	private List<InventarioAgrupamento> listaItens;
 	
 	@JsonIgnore
 	@OneToOne(mappedBy="inventario", fetch = FetchType.LAZY)
