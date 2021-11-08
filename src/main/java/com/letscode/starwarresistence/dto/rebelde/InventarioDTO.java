@@ -3,7 +3,8 @@ package com.letscode.starwarresistence.dto.rebelde;
 import java.io.Serializable;
 import java.util.List;
 
-import com.letscode.starwarresistence.dto.recursos.ItemDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letscode.starwarresistence.dto.recursos.ItemPostDTO;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,8 @@ public class InventarioDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore
 	private Integer codigo;
-	private List<ItemDTO> itens;
+	
+	private List<ItemPostDTO> itens;
 }

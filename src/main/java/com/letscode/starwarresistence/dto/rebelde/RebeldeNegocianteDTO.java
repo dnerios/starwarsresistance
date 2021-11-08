@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import com.letscode.starwarresistence.dto.recursos.ItemDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letscode.starwarresistence.dto.recursos.ItemNegociadoDTO;
 
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,8 @@ public class RebeldeNegocianteDTO implements Serializable{
 	private Integer codigoRebelde;
 	
 	@NotBlank(message = "Não me parece um bom negócio trocar uma lista de itens vazia...")
-	private List<ItemDTO> itens;
+	private List<ItemNegociadoDTO> itens;
 	
-	private Integer pontosNegociacao;
+	@JsonIgnore
+	private Integer pontosNegociacao = 0;
 }

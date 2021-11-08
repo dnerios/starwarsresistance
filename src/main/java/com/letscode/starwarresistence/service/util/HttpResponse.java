@@ -13,7 +13,7 @@ public class HttpResponse implements iHttpResponse {
 	public ResponseEntity<BodyDefaultResponseDTO> montarResposta(HttpStatus status, String error, String message,
 			Object body) {
 		
-		return ResponseEntity.status(HttpStatus.OK).body(BodyDefaultResponseDTO.builder()
+		return ResponseEntity.status(status).body(BodyDefaultResponseDTO.builder()
 				.status(status.value())
 				.error(error)
 				.message(message)

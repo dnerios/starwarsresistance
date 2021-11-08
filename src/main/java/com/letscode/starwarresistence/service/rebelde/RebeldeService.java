@@ -36,8 +36,6 @@ public class RebeldeService implements iRebeldeService{
 
 	@Override
 	public void adicionarRebelde(RebeldeDTO rebelde) {
-		//ModelMapper mapper = new ModelMapper();
-		//Rebelde dataRebelde = mapper.map(rebelde, Rebelde.class);
 		
 		Inventario inventario = inventarioRepository.save(Inventario.builder()
 				.codigo(null)

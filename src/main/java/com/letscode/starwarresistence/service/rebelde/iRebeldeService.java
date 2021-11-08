@@ -6,7 +6,7 @@ import com.letscode.starwarresistence.shared.exceptions.ObjectNotFoundException;
 
 public interface iRebeldeService {
 
-	void adicionarRebelde(RebeldeDTO rebelde);
+	void adicionarRebelde(RebeldeDTO rebelde) throws ObjectNotFoundException;
 	
 	void atualizarLocalizacao(MapaLocalizacaoDTO mapaLocalizacaoRebelde) throws ObjectNotFoundException;
 
